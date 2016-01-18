@@ -2,7 +2,7 @@ package org.metrobots;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class MetroDriverController {
+public class MetroXboxController {
 	// Analog Inputs (Axes)
 	public static final int LEFT_X = 0;
 	public static final int LEFT_Y = 1;
@@ -12,7 +12,7 @@ public class MetroDriverController {
 	public static final int RIGHT_Y = 5;
 	// Digital Inputs (Buttons)
 	public static final int BUTTON_A = 1, BUTTON_B = 2, BUTTON_X = 3,
-			BUTTON_Y = 4;
+					BUTTON_Y = 4;
 	public static final int LB = 5, RB = 6;
 	public static final int BUTTON_BACK = 7, BUTTON_START = 8;
 	public static final int LEFT_CLICK = 9, RIGHT_CLICK = 10;
@@ -20,16 +20,16 @@ public class MetroDriverController {
 	public static final double AXIS_DEADBAND = 0.01;
 
 	public boolean prevA, prevB, prevX, prevY, prevLB, prevRB, prevBack,
-			prevStart, prevLC, prevRC;
+					prevStart, prevLC, prevRC;
 	public boolean toggleA, toggleB, toggleX, toggleY, toggleLB, toggleRB,
-			toggleBack, toggleStart, toggleLC, toggleRC;
+					toggleBack, toggleStart, toggleLC, toggleRC;
 
 	public boolean previousButton[];
 	public boolean toggleButton[];
 
 	public Joystick joystick;
 
-	public MetroDriverController(int port) {
+	public MetroXboxController(int port) {
 		joystick = new Joystick(port);
 
 		prevA = false;
