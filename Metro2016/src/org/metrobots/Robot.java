@@ -1,9 +1,5 @@
 package org.metrobots;
 
-/* Above, name the package relative to our team's website, but make the
- * url backwards. I don't remember why you do this, but that's what you do
- */
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
@@ -21,7 +17,7 @@ public class Robot extends IterativeRobot {
 	 */
 
 	public static DriveTrain chassis; // Instantiate the drive train, an object from the DriveTrain.java, a custom file
-										// created by us
+					  // created by us
 
 	public static Talon fl, ml, bl, fr, mr, br; // Instantiate talons(motor controllers)
 
