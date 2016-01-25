@@ -1,9 +1,10 @@
 package org.metrobots;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
@@ -47,7 +48,7 @@ public class Robot extends IterativeRobot {
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
 
-		gyro = new Gyro(0); // Robot turning gyro - Port 0
+		gyro = new AnalogGyro(0); // Robot turning gyro - Port 0
 
 		driveShift = new DoubleSolenoid(0, 1); // Shifting solenoid - Port 0, 1
 
