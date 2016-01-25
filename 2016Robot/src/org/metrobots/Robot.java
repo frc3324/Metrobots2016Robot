@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 
 	public static Timer timer; // Instantiate the FRC Timer
 
-	public static MetroXboxController driver; // Instantiate the xbox controller
+	public static MetroXboxController driver, driver2; // Instantiate the xbox controller
 
 	public static DriverStation ds; // Instantiate driver station on the computer
 
@@ -39,11 +39,12 @@ public class Robot extends IterativeRobot {
 		 */
 
 		fl = new Talon(0); // Front left - Port 0
-		ml = new Talon(1); // Middle left - Port 1
-		bl = new Talon(2); // Back left - Port 2
-		fr = new Talon(3); // Front right - Port 3
-		mr = new Talon(4); // Middle right - Port 4
-		br = new Talon(5); // Back right - Port 5
+		bl = new Talon(1); // Back left - Port 2
+		fr = new Talon(5); // Front right - Port 3
+		br = new Talon(6); // Back right - Port 5
+		
+		//mr = new Talon(4); // Middle right - Port 4
+		//ml = new Talon(2); // Middle left - Port 1
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
@@ -53,11 +54,12 @@ public class Robot extends IterativeRobot {
 		driveShift = new DoubleSolenoid(0, 1); // Shifting solenoid - Port 0, 1
 
 		driver = new MetroXboxController(0); // Primary driver controller - Port 0
+		driver2 = new MetroXboxController(1);
 
 		chassis = new DriveTrain(fl, ml, bl, fr, mr, br, leftEncoder,
 						rightEncoder, gyro, driveShift); // Create drive train object for future manipulation
 
-		chassis.setInvertedMotors(false, false, true, false); // Invert proper motors, relative to the situation on the
+		chassis.setInvertedMotors(false, false, true, true); // Invert proper motors, relative to the situation on the
 																// robot
 
 		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting
@@ -110,8 +112,8 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		double ly = driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick
-		double ry = driver.getAxis(MetroXboxController.RIGHT_Y); // Set right motors to right joystick
+		double ly = driver.getAxis(1); // Set left motors to left joystick
+		double ry = driver2.getAxis(1); // Set right motors to right joystick
 
 		if (driver.getButton(MetroXboxController.BUTTON_B))
 			chassis.resetGyro(); // Reset gyro value once B button is pressed
