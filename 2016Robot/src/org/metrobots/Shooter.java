@@ -11,7 +11,7 @@ public class Shooter {
 	}
 
 	public void shootSpeed(double val) {
-		left.set(val);
-		right.set(val * -1);
+		left.set(val * -1);
+		right.set(val);
 	}
 }

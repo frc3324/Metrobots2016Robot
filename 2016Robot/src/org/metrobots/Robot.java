@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot {
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
 	public static Gyro gyro; // Instantiate gyro(rotational acceleration sensor)
 	public static DoubleSolenoid driveShift; // Instantiate solenoid (piston controller)
+	public static Shooter shooter;
 
 	public static Timer timer; // Instantiate the FRC Timer
 
@@ -63,6 +64,8 @@ public class Robot extends IterativeRobot {
 																// robot
 
 		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting
+		
+		shooter = new Shooter(fl, bl);
 
 		timer = new Timer();
 		timer.start(); // Start timer
@@ -106,6 +109,8 @@ public class Robot extends IterativeRobot {
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20
 		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to Shifting tank drive
 		chassis.setTargetAngle(chassis.getGyro()); // Set target angle of hold angle to current gyro angle
+		
+		shooter.shootSpeed(.4);
 	}
 
 	/**
@@ -118,7 +123,8 @@ public class Robot extends IterativeRobot {
 		if (driver.getButton(MetroXboxController.BUTTON_B))
 			chassis.resetGyro(); // Reset gyro value once B button is pressed
 
-		chassis.tankDrive(ly, ry); // Drive the robot
+		//chassis.tankDrive(ly, ry); // Drive the robot
+		//chassis.tankDrive(-0.5, 0); //Cameron's hack for the shooter
 
 		printValues(); // Print debug values
 	}
