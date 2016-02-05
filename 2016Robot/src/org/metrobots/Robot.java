@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
 	/*
@@ -20,16 +21,17 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain chassis; // Instantiate the drive train, an object from the DriveTrain.java, a custom file
 					  // created by us
 
-	public static Talon fl, ml, bl, fr, mr, br; // Instantiate talons(motor controllers)
+	public static Talon fl, ml, bl, fr, mr, br, intakeLeftMotor, intakeRightMotor; // Instantiate talons(motor controllers)
 
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
 	public static Gyro gyro; // Instantiate gyro(rotational acceleration sensor)
 	public static DoubleSolenoid driveShift; // Instantiate solenoid (piston controller)
 	public static Shooter shooter;
+	public static Intake intake;
 
 	public static Timer timer; // Instantiate the FRC Timer
 
-	public static MetroXboxController driver, driver2; // Instantiate the xbox controller
+	public static MetroXboxController driver, secondary; // Instantiate the xbox controller
 
 	public static DriverStation ds; // Instantiate driver station on the computer
 
@@ -39,12 +41,16 @@ public class Robot extends IterativeRobot {
 		 * up. This is where you tell which ports are which components
 		 */
 
-		fl = new Talon(0); // Front left - Port 0
-		bl = new Talon(1); // Back left - Port 2
-		fr = new Talon(5); // Front right - Port 3
-		br = new Talon(6); // Back right - Port 5
+		fl = new Talon(0); // Front left - Port 
+		bl = new Talon(1); // Back left - Port 
+		fr = new Talon(2); // Front right - Port 
+		br = new Talon(3); // Back right - Port 
 		
-		//mr = new Talon(4); // Middle right - Port 4
+		intakeLeftMotor = new Talon(4);
+		intakeRightMotor = new Talon(5);
+		
+		
+		//mr = new Talon(3); // Middle right - Port 4
 		//ml = new Talon(2); // Middle left - Port 1
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
@@ -55,7 +61,7 @@ public class Robot extends IterativeRobot {
 		driveShift = new DoubleSolenoid(0, 1); // Shifting solenoid - Port 0, 1
 
 		driver = new MetroXboxController(0); // Primary driver controller - Port 0
-		driver2 = new MetroXboxController(1);
+		secondary = new MetroXboxController(1); // Secondary driver controller - Port 1
 
 		chassis = new DriveTrain(fl, ml, bl, fr, mr, br, leftEncoder,
 						rightEncoder, gyro, driveShift); // Create drive train object for future manipulation
@@ -63,9 +69,11 @@ public class Robot extends IterativeRobot {
 		chassis.setInvertedMotors(false, false, true, true); // Invert proper motors, relative to the situation on the
 																// robot
 
-		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting
+		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to shifting
 		
-		shooter = new Shooter(fl, bl);
+		shooter = new Shooter(fl, fr);
+		
+		intake = new Intake(intakeLeftMotor, intakeRightMotor);
 
 		timer = new Timer();
 		timer.start(); // Start timer
@@ -81,22 +89,23 @@ public class Robot extends IterativeRobot {
 		timer.reset(); // Resets timer
 		timer.start(); // Starts timer
 		gyro.reset(); // Reset gyro angle
-		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting tank
+		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to shifting tank
 
 		chassis.setHoldAngle(false); // Make the robot not keep its angle still
 		chassis.setTargetAngle(0); // Make the robot not hold its angle
 		chassis.setFieldOriented(false); // Make robot not field oriented
 		chassis.setGyroHoldSensitivity(2); // Change sensitivity of gyro
 
-		Auton.setAutonCount(0); // Set auton to beginning
-
+		//Auton.setAutonCount(0); // Set auton to beginn
+		Scheduler.getInstance().add(new DriveandRotate());
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-		Auton.run(); // Run autonomous
+		//Auton.run(); // Run autonomous
+		Scheduler.getInstance().run();
 		printValues(); // Print autonomous debug
 	}
 
@@ -107,24 +116,34 @@ public class Robot extends IterativeRobot {
 		chassis.setHoldAngle(false); // Do not keep angle
 		chassis.setFieldOriented(false); // Do not orient to field
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20
-		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to Shifting tank drive
+		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to Shifting tank drive
 		chassis.setTargetAngle(chassis.getGyro()); // Set target angle of hold angle to current gyro angle
 		
-		shooter.shootSpeed(.4);
+		//shooter.shootSpeed(.4);
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		double ly = driver.getAxis(1); // Set left motors to left joystick
-		double ry = driver2.getAxis(1); // Set right motors to right joystick
+		double ly = driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick
+		double ry = driver.getAxis(MetroXboxController.RIGHT_Y); // Set right motors to right joystick
+		System.out.print(ry);
 
 		if (driver.getButton(MetroXboxController.BUTTON_B))
 			chassis.resetGyro(); // Reset gyro value once B button is pressed
+		
+		//shooter.shootSpeed(ly / 2);
 
-		//chassis.tankDrive(ly, ry); // Drive the robot
-		//chassis.tankDrive(-0.5, 0); //Cameron's hack for the shooter
+		chassis.tankDrive(ly, ry); // Drive the robot
+		
+		if (secondary.getButton(MetroXboxController.RB)) {
+			intake.set(-1);
+		} else if (secondary.getButton(MetroXboxController.LB)) {
+			intake.set(0.6);
+		} else {
+			intake.set(0);
+		}
 
 		printValues(); // Print debug values
 	}

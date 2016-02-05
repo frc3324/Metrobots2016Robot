@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class DriveTrain {
+public class DriveTrain extends Subsystem {
 
 	public static SpeedController fl, ml, bl, fr, mr, br;
 	public static Encoder leftEncoder, rightEncoder;
@@ -241,6 +242,8 @@ public class DriveTrain {
 		bl.set(0);
 		fr.set(0);
 		br.set(0);
+		ml.set(0);
+		mr.set(0);
 	}
 
 	public void setDriveType(int type) {
@@ -259,6 +262,12 @@ public class DriveTrain {
 		} else {
 			return "Stopped";
 		}
+	}
+
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

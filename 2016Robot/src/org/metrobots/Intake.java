@@ -3,13 +3,15 @@ package org.metrobots;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public class Intake {
-	public SpeedController motor, right;
+	public SpeedController left, right;
 
-	public Intake(SpeedController motor_) {
-		motor = motor_;
+	public Intake(SpeedController left_, SpeedController right_) {
+		left = left_;
+		right = right_;
 	}
 
-	public void intakeSpeed(double val) {
-		motor.set(val);
+	public void set(double val) {
+		left.set(val);
+		right.set(-val);
 	}
 }
