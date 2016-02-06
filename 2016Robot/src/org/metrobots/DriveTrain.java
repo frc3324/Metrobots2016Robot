@@ -125,8 +125,8 @@ public class DriveTrain extends Subsystem {
 		if (isFieldOriented) {
 
 			double gAngle = gyro.getAngle();
-			double cosA = Math.cos(gAngle * 3.1415926535 / 180);
-			double sinA = Math.sin(gAngle * 3.1415926535 / 180);
+			double cosA = Math.cos(gAngle * Math.PI / 180);
+			double sinA = Math.sin(gAngle * Math.PI / 180);
 
 			x = (x * cosA) - (y * sinA);
 			y = (x * sinA) + (y * cosA);
