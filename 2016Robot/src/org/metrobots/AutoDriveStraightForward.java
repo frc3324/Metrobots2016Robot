@@ -28,7 +28,7 @@ public class AutoDriveStraightForward extends Command {
 	protected void execute() {
 		// TODO Auto-generated method stub
 		passedTime = Utility.getFPGATime() - startTime;
-		Robot.chassis.tankDrive (speed, speed);
+		Robot.chassis.sixMotorTankDrive(-speed, speed);
 	}
 
 	@Override

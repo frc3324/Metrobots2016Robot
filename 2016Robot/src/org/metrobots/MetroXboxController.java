@@ -8,8 +8,8 @@ public class MetroXboxController {
 	public static final int LEFT_Y = 1;
 	public static final int LT = 2;
 	public static final int RT = 3;//fix these values
-	public static final int RIGHT_X = 2;
-	public static final int RIGHT_Y = 3;
+	public static final int RIGHT_X = 4;
+	public static final int RIGHT_Y = 5;
 	// Digital Inputs (Buttons)
 	public static final int BUTTON_A = 1, BUTTON_B = 2, BUTTON_X = 3,
 					BUTTON_Y = 4;

@@ -19,8 +19,8 @@ public class IntakeLauncher extends Subsystem {
 	}
 	
 	public void intake(double speed) {
-		left.set(speed);
-		right.set(-speed);
+		left.set(-speed);
+		right.set(speed);
 	}
 	
 	public void actuateAngle(double speed) {
@@ -30,11 +30,11 @@ public class IntakeLauncher extends Subsystem {
 	public void actuatePiston(double time) {
 		if(time != 0){
 			if((time/ 1000000) < 2)
-				piston.set(DoubleSolenoid.Value.kForward);
+				this.pistonForward();
 			else if((time/ 1000000) < 4)
-				piston.set(DoubleSolenoid.Value.kReverse);
+				this.pistonReverse();
 			else
-				piston.set(DoubleSolenoid.Value.kOff);
+				this.pistonOff();
 		}
 		else{
 			piston.set(DoubleSolenoid.Value.kOff);
@@ -42,6 +42,18 @@ public class IntakeLauncher extends Subsystem {
 
 	}
 
+	public void pistonForward() {
+		piston.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	public void pistonReverse() {
+		piston.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public void pistonOff() {
+		piston.set(DoubleSolenoid.Value.kOff);
+	}
+	
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub

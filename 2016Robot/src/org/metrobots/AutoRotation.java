@@ -12,7 +12,7 @@ public class AutoRotation extends Command {
 	
 	public double startTime, passedTime;
 	
-	public AutoRotation(double speed, boolean clockwise,double driveTime)
+	public AutoRotation(double speed, boolean clockwise, double driveTime)
 	{
 		requires((Subsystem) Robot.chassis);
 		this.speed = speed;
@@ -23,19 +23,19 @@ public class AutoRotation extends Command {
 	@Override
 	protected void end() {
 		// TODO Auto-generated method stub
-		Robot.chassis.tankDrive(0, 0);
+		Robot.chassis.sixMotorTankDrive(0, 0);
 	}
 
 	@Override
 	protected void execute() {
 		passedTime = Utility.getFPGATime() - startTime;
-		Robot.chassis.tankDrive(speed, -speed);
+		Robot.chassis.sixMotorTankDrive(speed, speed);
 		// TODO Auto-generated method stub
 	}
 
 	@Override
 	protected void initialize() {
-		Robot.chassis.tankDrive(0, 0);
+		Robot.chassis.sixMotorTankDrive(0, 0);
 		this.passedTime = 0;
 		this.startTime = Utility.getFPGATime();
 		Robot.chassis.resetGyro();

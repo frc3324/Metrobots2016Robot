@@ -44,16 +44,15 @@ public class Robot extends IterativeRobot {
 		 */
 
 		fl = new Talon(0); // Front left - Port 
-		bl = new Talon(1); // Back left - Port 
-		fr = new Talon(2); // Front right - Port 
-		br = new Talon(3); // Back right - Port 
-		
+		ml = new Talon(1); // Middle left - Port 1
+		bl = new Talon(2); // Back left - Port 
+		fr = new Talon(3); // Front right - Port 
+		mr = new Talon(4); // Middle right - Port 4
+		br = new Talon(5); // Back right - Port 
+
 		intakeLeftMotor = new Talon(6);
 		intakeRightMotor = new Talon(7);
 		actuationMotor = new Talon(8);
-		
-		mr = new Talon(4); // Middle right - Port 4
-		ml = new Talon(5); // Middle left - Port 1
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
@@ -69,11 +68,13 @@ public class Robot extends IterativeRobot {
 		chassis = new DriveTrain(fl, ml, bl, fr, mr, br, leftEncoder,
 						rightEncoder, gyro, driveShift); // Create drive train object for future manipulation
 
-		chassis.setInvertedMotors(false, false, true, true); // Invert proper motors, relative to the situation on the
+		//chassis.setInvertedMotors(false, false, true, true); // Invert proper motors, relative to the situation on the
 																// robot
 
-		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to shifting
+		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting
 
+		intakeLauncher = new IntakeLauncher(intakeLeftMotor, intakeRightMotor, actuationMotor, shootArm);
+		
 		timer = new Timer();
 		timer.start(); // Start timer
 
@@ -91,7 +92,7 @@ public class Robot extends IterativeRobot {
 		timer.reset(); // Resets timer
 		timer.start(); // Starts timer
 		gyro.reset(); // Reset gyro angle
-		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to shifting tank
+		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting tank
 
 		chassis.setHoldAngle(false); // Make the robot not keep its angle still
 		chassis.setTargetAngle(0); // Make the robot not hold its angle
@@ -99,7 +100,7 @@ public class Robot extends IterativeRobot {
 		chassis.setGyroHoldSensitivity(2); // Change sensitivity of gyro
 
 		//Auton.setAutonCount(0); // Set auton to beginn
-		Scheduler.getInstance().add(new DriveandRotate());
+		Scheduler.getInstance().add(new AutoCollectandLaunch());
 	}
 
 	/**
@@ -118,7 +119,7 @@ public class Robot extends IterativeRobot {
 		chassis.setHoldAngle(false); // Do not keep angle
 		chassis.setFieldOriented(false); // Do not orient to field
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20
-		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to Shifting tank drive
+		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to Shifting tank drive
 		chassis.setTargetAngle(chassis.getGyro()); // Set target angle of hold angle to current gyro angle
 		intakeLauncher.intake(0);
 		intakeLauncher.actuateAngle(0);
@@ -129,7 +130,7 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		double dly = driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick
+		double dly = -driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick  NEGATATED FOR SIX MOTOR INPUT
 		double dry = driver.getAxis(MetroXboxController.RIGHT_Y); // Set right motors to right joystick
 		
 		double sly = secondary.getAxis(MetroXboxController.LEFT_Y);
@@ -139,8 +140,10 @@ public class Robot extends IterativeRobot {
 		boolean rb_button = secondary.getButton(MetroXboxController.RB);
 		
 		if(rb_button){
-			if(startTime == 0)
+			if(startTime == 0){
 				startTime = Utility.getFPGATime();
+			}
+				
 			actuateTime = Utility.getFPGATime() - startTime;
 		}
 		else{
@@ -163,7 +166,7 @@ public class Robot extends IterativeRobot {
 		
 		//shooter.shootSpeed(ly / 2);
 
-		chassis.tankDrive(dly, dry); // Drive the robot
+		chassis.sixMotorTankDrive(dly, dry); // Drive the robot
 		
 		intakeLauncher.actuateAngle(sly);
 		
