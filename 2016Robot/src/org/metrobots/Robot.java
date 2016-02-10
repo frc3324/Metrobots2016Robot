@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain chassis; // Instantiate the drive train, an object from the DriveTrain.java, a custom file
 					  // created by us
 
-	public static Talon fl, ml, bl, fr, mr, br, intakeLeftMotor, intakeRightMotor, actuationMotor; // Instantiate talons(motor controllers)
+	public static Talon fl, bl, fr, br, intakeLeftMotor, intakeRightMotor, actuationMotor; // Instantiate talons(motor controllers)
 
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
 	public static Gyro gyro; // Instantiate gyro(rotational acceleration sensor)
@@ -44,15 +44,13 @@ public class Robot extends IterativeRobot {
 		 */
 
 		fl = new Talon(0); // Front left - Port 
-		ml = new Talon(1); // Middle left - Port 1
-		bl = new Talon(2); // Back left - Port 
-		fr = new Talon(3); // Front right - Port 
-		mr = new Talon(4); // Middle right - Port 4
-		br = new Talon(5); // Back right - Port 
+		bl = new Talon(1); // Back left - Port 
+		fr = new Talon(2); // Front right - Port 
+		br = new Talon(3); // Back right - Port 
 
-		intakeLeftMotor = new Talon(6);
-		intakeRightMotor = new Talon(7);
-		actuationMotor = new Talon(8);
+		intakeLeftMotor = new Talon(4);
+		intakeRightMotor = new Talon(5);
+		actuationMotor = new Talon(6);
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
@@ -65,13 +63,13 @@ public class Robot extends IterativeRobot {
 		driver = new MetroXboxController(0); // Primary driver controller - Port 0
 		secondary = new MetroXboxController(1); // Secondary driver controller - Port 1
 
-		chassis = new DriveTrain(fl, ml, bl, fr, mr, br, leftEncoder,
+		chassis = new DriveTrain(fl, bl, fr, br, leftEncoder,
 						rightEncoder, gyro, driveShift); // Create drive train object for future manipulation
 
 		//chassis.setInvertedMotors(false, false, true, true); // Invert proper motors, relative to the situation on the
 																// robot
 
-		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting
+		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to shifting
 
 		intakeLauncher = new IntakeLauncher(intakeLeftMotor, intakeRightMotor, actuationMotor, shootArm);
 		
@@ -92,7 +90,7 @@ public class Robot extends IterativeRobot {
 		timer.reset(); // Resets timer
 		timer.start(); // Starts timer
 		gyro.reset(); // Reset gyro angle
-		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting tank
+		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to shifting tank
 
 		chassis.setHoldAngle(false); // Make the robot not keep its angle still
 		chassis.setTargetAngle(0); // Make the robot not hold its angle
@@ -119,7 +117,7 @@ public class Robot extends IterativeRobot {
 		chassis.setHoldAngle(false); // Do not keep angle
 		chassis.setFieldOriented(false); // Do not orient to field
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20
-		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to Shifting tank drive
+		chassis.setDriveType(DriveTrain.TANK_DRIVE); // Set drive type to Shifting tank drive
 		chassis.setTargetAngle(chassis.getGyro()); // Set target angle of hold angle to current gyro angle
 		intakeLauncher.intake(0);
 		intakeLauncher.actuateAngle(0);
