@@ -1,10 +1,16 @@
 package org.metrobots;
 
+import java.io.IOException;
+
+import org.metrobots.botcv.communication.CommInterface;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import net.sf.lipermi.handler.CallHandler;
+import net.sf.lipermi.net.Client;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
@@ -36,6 +42,8 @@ public class Robot extends IterativeRobot {
 	
 	public static IntakeLauncher intakeLauncher;
 	public static double actuateTime, startTime;
+	
+	public static CommInterface comms;
 
 	public void robotInit() {
 		/*
@@ -83,6 +91,14 @@ public class Robot extends IterativeRobot {
 		startTime = 0.0;
 		actuateTime = 0.0;
 
+		CallHandler callHandler = new CallHandler();
+		try {
+			Client client = new Client("127.0.0.1", 5800, callHandler);
+			comms = (CommInterface) client.getGlobal(CommInterface.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -116,6 +132,12 @@ public class Robot extends IterativeRobot {
 	 * This function is called once when the teleop is enabled
 	 */
 	public void teleopInit() {
+		try {
+			comms.print("hi from roborio");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		chassis.setHoldAngle(false); // Do not keep angle
 		chassis.setFieldOriented(false); // Do not orient to field
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20
