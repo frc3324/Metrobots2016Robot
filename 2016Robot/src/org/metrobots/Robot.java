@@ -1,16 +1,24 @@
 package org.metrobots;
 
+<<<<<<< HEAD
 import org.metrobots.commands.auto.CollectandLaunch;
 import org.metrobots.commands.teleop.DriveGroup;
 import org.metrobots.subsystems.Climbing;
 import org.metrobots.subsystems.DriveTrain;
 import org.metrobots.subsystems.IntakeLauncher;
+=======
+import java.io.IOException;
+
+import org.metrobots.botcv.communication.CommInterface;
+>>>>>>> 915d86beaa41eda0e84f038543ab9adff802dab0
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import net.sf.lipermi.handler.CallHandler;
+import net.sf.lipermi.net.Client;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
@@ -42,7 +50,11 @@ public class Robot extends IterativeRobot {
 	public static IntakeLauncher intakeLauncher;
 	public static double actuateTime, startTime;
 	
+<<<<<<< HEAD
 	public static Climbing climber;
+=======
+	public static CommInterface comms;
+>>>>>>> 915d86beaa41eda0e84f038543ab9adff802dab0
 
 	public void robotInit() {
 		
@@ -92,6 +104,14 @@ public class Robot extends IterativeRobot {
 		startTime = 0.0;
 		actuateTime = 0.0;
 
+		CallHandler callHandler = new CallHandler();
+		try {
+			Client client = new Client("127.0.0.1", 5800, callHandler);
+			comms = (CommInterface) client.getGlobal(CommInterface.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -125,6 +145,12 @@ public class Robot extends IterativeRobot {
 	 * This function is called once when the teleop is enabled
 	 */
 	public void teleopInit() {
+		try {
+			comms.print("hi from roborio");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		chassis.setHoldAngle(false); // Do not keep angle
 		chassis.setFieldOriented(false); // Do not orient to field
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20
