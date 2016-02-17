@@ -1,16 +1,13 @@
 package org.metrobots;
 
-<<<<<<< HEAD
 import org.metrobots.commands.auto.CollectandLaunch;
 import org.metrobots.commands.teleop.DriveGroup;
 import org.metrobots.subsystems.Climbing;
 import org.metrobots.subsystems.DriveTrain;
 import org.metrobots.subsystems.IntakeLauncher;
-=======
 import java.io.IOException;
 
 import org.metrobots.botcv.communication.CommInterface;
->>>>>>> 915d86beaa41eda0e84f038543ab9adff802dab0
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -50,11 +47,8 @@ public class Robot extends IterativeRobot {
 	public static IntakeLauncher intakeLauncher;
 	public static double actuateTime, startTime;
 	
-<<<<<<< HEAD
 	public static Climbing climber;
-=======
 	public static CommInterface comms;
->>>>>>> 915d86beaa41eda0e84f038543ab9adff802dab0
 
 	public void robotInit() {
 		
