@@ -96,7 +96,7 @@ public class Robot extends IterativeRobot {
 			Client client = new Client("127.0.0.1", 5800, callHandler);
 			comms = (CommInterface) client.getGlobal(CommInterface.class);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.err.println("Could not establish communications with tablet!");
 			e.printStackTrace();
 		}
 	}
