@@ -1,4 +1,4 @@
-package org.metrobots.commands.teleop;
+package org.metrobots.commands.teleop; //use controller without red tape
 
 import org.metrobots.MetroXboxController;
 import org.metrobots.Robot;
@@ -29,10 +29,10 @@ public class OperateIntakeLaunching extends Command {
 		boolean rb_button = Robot.secondary.getButton(MetroXboxController.RB);
 		
 		if(a_button){
-			Robot.intakeLauncher.intake(0.6);
+			Robot.intakeLauncher.intake(-0.4); //was 0.6 //inward //negative is inward
 		}
 		else if(y_button){
-			Robot.intakeLauncher.intake(-1.0);
+			Robot.intakeLauncher.intake(1.0); //was  -1.0 //outward //positive is outward
 		}
 		else{
 			Robot.intakeLauncher.intake(0);
@@ -51,6 +51,7 @@ public class OperateIntakeLaunching extends Command {
 		}
 		
 		Robot.intakeLauncher.actuatePiston(actuateTime);
+		//Robot.intakeLauncher.actuateAngle(speed); //speed or angle needs to be defined
 	}
 
 	@Override
