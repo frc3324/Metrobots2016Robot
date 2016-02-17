@@ -1,8 +1,16 @@
 package org.metrobots;
 
+<<<<<<< HEAD
+import org.metrobots.commands.auto.CollectandLaunch;
+import org.metrobots.commands.teleop.DriveGroup;
+import org.metrobots.subsystems.Climbing;
+import org.metrobots.subsystems.DriveTrain;
+import org.metrobots.subsystems.IntakeLauncher;
+=======
 import java.io.IOException;
 
 import org.metrobots.botcv.communication.CommInterface;
+>>>>>>> 915d86beaa41eda0e84f038543ab9adff802dab0
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -14,7 +22,6 @@ import net.sf.lipermi.net.Client;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Utility;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
@@ -31,7 +38,7 @@ public class Robot extends IterativeRobot {
 	public static Talon fl, bl, ml, fr, br, mr, intakeLeftMotor, intakeRightMotor, actuationMotor; // Instantiate talons(motor controllers)
 
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
-	public static Gyro gyro; // Instantiate gyro(rotational acceleration sensor)
+	public static Gyro gyro;// Instantiate gyro(rotational acceleration sensor)
 	public static DoubleSolenoid driveShift, shootArm; // Instantiate solenoid (piston controller)
 	
 	public static Timer timer; // Instantiate the FRC Timer
@@ -43,10 +50,16 @@ public class Robot extends IterativeRobot {
 	public static IntakeLauncher intakeLauncher;
 	public static double actuateTime, startTime;
 	
+<<<<<<< HEAD
+	public static Climbing climber;
+=======
 	public static CommInterface comms;
+>>>>>>> 915d86beaa41eda0e84f038543ab9adff802dab0
 
 	public void robotInit() {
+		
 		/*
+		 * 
 		 * This is the initialization of the robot. This method will run one time at the moment that the roboRIO starts
 		 * up. This is where you tell which ports are which components
 		 */
@@ -116,7 +129,7 @@ public class Robot extends IterativeRobot {
 		chassis.setGyroHoldSensitivity(2); // Change sensitivity of gyro
 
 		//Auton.setAutonCount(0); // Set auton to beginn
-		Scheduler.getInstance().add(new AutoCollectandLaunch());
+		Scheduler.getInstance().add(new CollectandLaunch());
 	}
 
 	/**
@@ -145,14 +158,18 @@ public class Robot extends IterativeRobot {
 		chassis.setTargetAngle(chassis.getGyro()); // Set target angle of hold angle to current gyro angle
 		intakeLauncher.intake(0);
 		intakeLauncher.actuateAngle(0);
-		
+		Scheduler.getInstance().add(new DriveGroup());
+	
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		double dly = -driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick  NEGATATED FOR SIX MOTOR INPUT
+		
+		Scheduler.getInstance().run();
+	
+		/*double dly = -driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick  NEGATATED FOR SIX MOTOR INPUT
 		double dry = driver.getAxis(MetroXboxController.RIGHT_Y); // Set right motors to right joystick
 		
 		double sly = secondary.getAxis(MetroXboxController.LEFT_Y);
@@ -188,13 +205,13 @@ public class Robot extends IterativeRobot {
 		
 		//shooter.shootSpeed(ly / 2);
 
-		chassis.sixMotorTankDrive(dly, dry); // Drive the robot
+		//chassis.sixMotorTankDrive(dly, dry); // Drive the robot
 		
-		intakeLauncher.actuateAngle(sly);
+		//intakeLauncher.actuateAngle(sly);
 		
-		intakeLauncher.actuatePiston(actuateTime);
+		//intakeLauncher.actuatePiston(actuateTime);
 		
-		printValues(); // Print debug values
+		printValues(); // Print debug values*/
 	}
 
 	public void disabledPeriodic() {
