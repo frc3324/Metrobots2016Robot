@@ -5,11 +5,9 @@ import org.metrobots.commands.teleop.DriveGroup;
 import org.metrobots.subsystems.Climbing;
 import org.metrobots.subsystems.DriveTrain;
 import org.metrobots.subsystems.IntakeLauncher;
-
 import java.io.IOException;
 
 import org.metrobots.botcv.communication.CommInterface;
-
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -60,7 +58,7 @@ public class Robot extends IterativeRobot {
 		 * up. This is where you tell which ports are which components
 		 */
 
-		fl = new Talon(4); // Front left - Port //May need to change; new talons (for all six; no defined front or back)?
+		fl = new Talon(4); // Front left - Port 
 		ml = new Talon(5);
 		bl = new Talon(6); // Back left - Port 
 		fr = new Talon(0); // Front right - Port 
@@ -105,7 +103,7 @@ public class Robot extends IterativeRobot {
 			Client client = new Client("127.0.0.1", 5800, callHandler);
 			comms = (CommInterface) client.getGlobal(CommInterface.class);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.err.println("Could not establish communications with tablet!");
 			e.printStackTrace();
 		}
 	}
