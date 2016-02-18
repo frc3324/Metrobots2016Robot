@@ -58,16 +58,16 @@ public class Robot extends IterativeRobot {
 		 * up. This is where you tell which ports are which components
 		 */
 
-		fl = new Talon(4); // Front left - Port 
-		ml = new Talon(5);
-		bl = new Talon(6); // Back left - Port 
-		fr = new Talon(0); // Front right - Port 
-		mr = new Talon(1);
-		br = new Talon(2); // Back right - Port 
+		fl = new Talon(0); // Front left - Port 
+		ml = new Talon(1);
+		bl = new Talon(2); // Back left - Port 
+		fr = new Talon(3); // Front right - Port 
+		mr = new Talon(4);
+		br = new Talon(5); // Back right - Port 
 
 		intakeLeftMotor = new Talon(7);
 		intakeRightMotor = new Talon(8);
-		actuationMotor = new Talon(9);
+		actuationMotor = new Talon(6);
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
@@ -122,7 +122,7 @@ public class Robot extends IterativeRobot {
 		chassis.setFieldOriented(false); // Make robot not field oriented
 		chassis.setGyroHoldSensitivity(2); // Change sensitivity of gyro
 
-		//Auton.setAutonCount(0); // Set auton to beginn
+		//Auton.setAutonCount(0); // Set auton to begin
 		Scheduler.getInstance().add(new CollectandLaunch());
 	}
 
@@ -139,12 +139,6 @@ public class Robot extends IterativeRobot {
 	 * This function is called once when the teleop is enabled
 	 */
 	public void teleopInit() {
-		try {
-			comms.print("hi from roborio");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 		chassis.setHoldAngle(false); // Do not keep angle
 		chassis.setFieldOriented(false); // Do not orient to field
 		chassis.setGyroHoldSensitivity(20); // Hold angle sensitivity of 20

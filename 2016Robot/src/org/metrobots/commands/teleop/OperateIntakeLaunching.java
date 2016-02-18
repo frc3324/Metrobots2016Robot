@@ -52,6 +52,9 @@ public class OperateIntakeLaunching extends Command {
 		
 		Robot.intakeLauncher.actuatePiston(actuateTime);
 		//Robot.intakeLauncher.actuateAngle(speed); //speed or angle needs to be defined
+		
+		double shooterSpeed = -(Robot.secondary.getAxis(MetroXboxController.LEFT_Y));
+		Robot.intakeLauncher.actuateAngle(shooterSpeed);
 	}
 
 	@Override
