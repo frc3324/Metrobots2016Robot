@@ -2,7 +2,7 @@ package org.metrobots;
 
 import org.metrobots.commands.auto.CollectandLaunch;
 import org.metrobots.commands.teleop.DriveGroup;
-import org.metrobots.subsystems.Climbing;
+import org.metrobots.subsystems.Climber;
 import org.metrobots.subsystems.DriveTrain;
 import org.metrobots.subsystems.IntakeLauncher;
 import java.io.IOException;
@@ -10,10 +10,13 @@ import java.io.IOException;
 import org.metrobots.botcv.communication.CommInterface;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -32,7 +35,8 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain chassis; // Instantiate the drive train, an object from the DriveTrain.java, a custom file
 					  // created by us
 
-	public static Talon fl, bl, ml, fr, br, mr, intakeLeftMotor, intakeRightMotor, actuationMotor; // Instantiate talons(motor controllers)
+	public static Talon fl, bl, ml, fr, br, mr, intakeLeftMotor,
+						intakeRightMotor, actuationMotor, windowMotor; // Instantiate talons(motor controllers)
 
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
 	public static Gyro gyro;// Instantiate gyro(rotational acceleration sensor)
@@ -46,8 +50,10 @@ public class Robot extends IterativeRobot {
 	
 	public static IntakeLauncher intakeLauncher;
 	public static double actuateTime, startTime;
+	public static AnalogInput anglePot;
+	public static DigitalInput actuationLimit;
 	
-	public static Climbing climber;
+	public static Climber climber;
 	public static CommInterface comms;
 
 	public void robotInit() {
@@ -65,9 +71,13 @@ public class Robot extends IterativeRobot {
 		mr = new Talon(4);
 		br = new Talon(5); // Back right - Port 
 
-		intakeLeftMotor = new Talon(7);
-		intakeRightMotor = new Talon(8);
-		actuationMotor = new Talon(6);
+		intakeLeftMotor = new Talon(6);
+		intakeRightMotor = new Talon(7);
+		actuationMotor = new Talon(8);
+		windowMotor = new Talon(9);
+		
+		anglePot = new AnalogInput(1);
+		actuationLimit = new DigitalInput(2);
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
@@ -88,7 +98,7 @@ public class Robot extends IterativeRobot {
 
 		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting
 
-		intakeLauncher = new IntakeLauncher(intakeLeftMotor, intakeRightMotor, actuationMotor, shootArm);
+		intakeLauncher = new IntakeLauncher(intakeLeftMotor, intakeRightMotor, actuationMotor, shootArm, anglePot);
 		
 		timer = new Timer();
 		timer.start(); // Start timer
@@ -178,7 +188,7 @@ public class Robot extends IterativeRobot {
 			actuateTime = 0;
 		}
 		
-		if(a_button){
+		if(a_button){		
 			intakeLauncher.intake(0.6);
 		}
 		else if(y_button){
@@ -197,9 +207,9 @@ public class Robot extends IterativeRobot {
 		
 		//intakeLauncher.actuateAngle(sly);
 		
-		//intakeLauncher.actuatePiston(actuateTime);
+		//intakeLauncher.actuatePiston(actuateTime);*/
 		
-		printValues(); // Print debug values*/
+		printValues(); // Print debug values
 	}
 
 	public void disabledPeriodic() {
@@ -212,7 +222,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void printValues() {
-
+		System.out.println("Potentiometer: " + Double.toString(Robot.anglePot.getValue()));
+		System.out.println("Actuation limit: " + Boolean.toString(Robot.actuationLimit.get()));
 	}
 
 }

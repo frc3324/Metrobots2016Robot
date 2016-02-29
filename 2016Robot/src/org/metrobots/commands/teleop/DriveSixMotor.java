@@ -20,9 +20,25 @@ public class DriveSixMotor extends Command {
 
 	@Override
 	protected void execute() {
-		double dly = -Robot.driver.getAxis(MetroXboxController.LEFT_Y);
-		double dry = Robot.driver.getAxis(MetroXboxController.RIGHT_Y);
-		Robot.chassis.sixMotorTankDrive(dly, dry);
+		if (Robot.driver.getButton(MetroXboxController.BUTTON_A) == true){
+			if (Robot.comms.getFiringStatus() == -1){
+				Robot.chassis.sixMotorTankDrive(-0.5, -0.5);
+			}
+			else if (Robot.comms.getFiringStatus() == 1){
+				Robot.chassis.sixMotorTankDrive(0.5, 0.5);
+			}
+			else if (Robot.comms.getFiringStatus() == 0){
+				Robot.chassis.sixMotorTankDrive(0, 0);
+			}
+			else{
+				//you can't see me
+			}
+		}
+		else{
+			double dly = Robot.driver.getAxis(MetroXboxController.LEFT_Y);
+			double dry = Robot.driver.getAxis(MetroXboxController.RIGHT_Y);
+			Robot.chassis.sixMotorTankDrive(dly, dry);
+		}
 		
 	}
 

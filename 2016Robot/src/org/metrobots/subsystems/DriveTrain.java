@@ -87,8 +87,8 @@ public class DriveTrain extends Subsystem {
 		mrInv = 1;
 		brInv = 1;
 		flInv = 1;
-		mlInv = 1;
-		blInv = 1;
+		mlInv = -1;
+		blInv = -1;
 
 		driveType = 0;
 	}

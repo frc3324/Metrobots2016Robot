@@ -1,5 +1,6 @@
 package org.metrobots.subsystems;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -8,13 +9,15 @@ public class IntakeLauncher extends Subsystem {
 	
 	public static SpeedController left, right, actuation;
 	public static DoubleSolenoid piston;
+	public static AnalogInput pot;
 	
-	public IntakeLauncher(SpeedController left_, SpeedController right_, SpeedController actuation_, DoubleSolenoid piston_) {
+	public IntakeLauncher(SpeedController left_, SpeedController right_, SpeedController actuation_, DoubleSolenoid piston_, AnalogInput pot_) {
 		
 		left = left_;
 		right = right_;
 		actuation = actuation_;
 		piston = piston_;
+		pot = pot_;
 		
 	}
 	
@@ -24,8 +27,13 @@ public class IntakeLauncher extends Subsystem {
 	}
 	
 	public void actuateAngle(double speed) {
-		actuation.set(speed);
+		if (!(speed < 0 && pot.getValue() > 4630) && !(speed > 0 && pot.getValue() < 1040)) {
+			actuation.set(speed);
+		} else {
+			actuation.set(0);
+		}
 	}
+	
 	
 	public void actuatePiston(double time) {
 		if(time != 0){
@@ -39,7 +47,7 @@ public class IntakeLauncher extends Subsystem {
 		else{
 			piston.set(DoubleSolenoid.Value.kOff);
 		}
-
+                              
 	}
 
 	public void pistonForward() {
