@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 						intakeRightMotor, actuationMotor, windowMotor; // Instantiate talons(motor controllers)
 
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
-	public static Gyro gyro;// Instantiate gyro(rotational acceleration sensor)
+	public static Gyro gyro; //Instantiate gyro (rotational acceleration sensor)
 	public static DoubleSolenoid driveShift, shootArm; // Instantiate solenoid (piston controller)
 	
 	public static Timer timer; // Instantiate the FRC Timer
@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 	public static IntakeLauncher intakeLauncher;
 	public static double actuateTime, startTime;
 	public static AnalogInput anglePot;
-	public static DigitalInput actuationLimit;
+	public static DigitalInput windowLimit, actuationTopLimit, actuationBottomLimit;
 	
 	public static Climber climber;
 	public static CommInterface comms;
@@ -77,7 +77,9 @@ public class Robot extends IterativeRobot {
 		windowMotor = new Talon(9);
 		
 		anglePot = new AnalogInput(1);
-		actuationLimit = new DigitalInput(2);
+		windowLimit = new DigitalInput(2);
+		actuationBottomLimit = new DigitalInput(3);
+		actuationTopLimit = new DigitalInput(4);
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
@@ -223,7 +225,7 @@ public class Robot extends IterativeRobot {
 
 	public void printValues() {
 		System.out.println("Potentiometer: " + Double.toString(Robot.anglePot.getValue()));
-		System.out.println("Actuation limit: " + Boolean.toString(Robot.actuationLimit.get()));
+		System.out.println("Actuation limit: " + Boolean.toString(Robot.windowLimit.get()));
 	}
 
 }

@@ -61,7 +61,7 @@ public class OperateIntakeLaunching extends Command {
 		
 		if (Robot.secondary.getButton(MetroXboxController.BUTTON_X)) { //Kill me later
 			Robot.windowMotor.set(.5);
-			while (!Robot.actuationLimit.get())
+			while (!Robot.windowLimit.get())
 				continue;
 			
 			Robot.windowMotor.set(0);

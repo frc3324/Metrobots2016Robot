@@ -1,4 +1,4 @@
-package org.metrobots.commands.teleop;
+package org.metrobots.commands.auto;
 
 import org.metrobots.Robot;
 
