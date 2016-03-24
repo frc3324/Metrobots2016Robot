@@ -16,7 +16,7 @@ public class DriveStraightForward extends Command {
 	{
 		requires((Subsystem) Robot.chassis);
 		this.driveTime = driveTime;
-		System.out.println(Robot.comms.getOrientation(true)[2]);
+		//System.out.println(Robot.comms.getOrientation(true)[2]);
 		this.speed = speed;
 	}
 	
@@ -31,13 +31,9 @@ public class DriveStraightForward extends Command {
 	protected void execute() {
 		// TODO Auto-generated method stub
 		passedTime = Utility.getFPGATime() - startTime;
-		Robot.chassis.sixMotorTankDrive(-speed, speed);
-		float angle = Robot.comms.getOrientation(true)[2];
-		System.out.println("Angle: " + Float.toString(angle));
-		
-		if (Math.abs(angle) > 1.0 ) {
-			
-		}
+		Robot.chassis.sixMotorTankDrive(speed, speed);
+		//float angle = Robot.comms.getOrientation(true)[2];
+		//System.out.println("Angle: " + Float.toString(angle));
 	}
 
 	@Override

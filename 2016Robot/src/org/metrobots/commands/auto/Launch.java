@@ -4,6 +4,10 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Launch extends Command {
 
+	public Launch(double d, double e) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub

@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class IntakeLauncher extends Subsystem {
-	
 	public static SpeedController left, right, actuation;
 	public static DoubleSolenoid piston;
 	public static AnalogInput pot;
+	private int target;
+	
 	
 	public IntakeLauncher(SpeedController left_, SpeedController right_, SpeedController actuation_, DoubleSolenoid piston_, AnalogInput pot_) {
 		
@@ -22,21 +23,24 @@ public class IntakeLauncher extends Subsystem {
 	}
 	
 	public void intake(double speed) {
-		left.set(-speed);
+		left.set(-speed); 
 		right.set(speed);
 	}
 	
-	public void actuateAngle(double speed) {
-		if (!(speed < 0 && pot.getValue() > 4630) && !(speed > 0 && pot.getValue() < 1040)) {
+	public void actuateSpeed(double speed) {
+		//if ((speed > 0 && pot.getValue() > 1050) || (speed < 0 && pot.getValue() < 640)) {
+		//	actuation.set(0);
+		//} else {
 			actuation.set(speed);
-		} else {
-			actuation.set(0);
-		}
+		//}
 	}
 	
+	public void actuateAngle(int target) {
+		actuation.set((pot.getValue() - target)/410);	
+	}
 	
 	public void actuatePiston(double time) {
-		if(time != 0){
+		/*if(time != 0){
 			if((time/ 1000000) < 2)
 				this.pistonForward();
 			else if((time/ 1000000) < 4)
@@ -46,7 +50,7 @@ public class IntakeLauncher extends Subsystem {
 		}
 		else{
 			piston.set(DoubleSolenoid.Value.kOff);
-		}
+		}*/
                               
 	}
 

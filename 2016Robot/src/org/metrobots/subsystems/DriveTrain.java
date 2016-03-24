@@ -2,8 +2,9 @@ package org.metrobots.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class DriveTrain extends Subsystem {
@@ -29,7 +30,7 @@ public class DriveTrain extends Subsystem {
 	public static final int SIX_MOTOR_TANK_DRIVE = 3;
 
 	public DriveTrain(SpeedController fl_, SpeedController bl_,
-					SpeedController fr_, SpeedController br_,
+			SpeedController fr_, SpeedController br_,
 					Encoder leftEncoder_, Encoder rightEncoder_, Gyro gyro_,
 					DoubleSolenoid shift_) {
 		fl = fl_;
@@ -59,8 +60,8 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public DriveTrain(SpeedController fl_, SpeedController ml_,
-					SpeedController bl_, SpeedController fr_,
-					SpeedController mr_, SpeedController br_,
+			SpeedController bl_, SpeedController fr_,
+			SpeedController mr_, SpeedController br_,
 					Encoder leftEncoder_, Encoder rightEncoder_, Gyro gyro_,
 					DoubleSolenoid shift_) {
 		fl = fl_;
@@ -86,7 +87,7 @@ public class DriveTrain extends Subsystem {
 		frInv = 1;
 		mrInv = 1;
 		brInv = 1;
-		flInv = 1;
+		flInv = -1;
 		mlInv = -1;
 		blInv = -1;
 
@@ -107,10 +108,10 @@ public class DriveTrain extends Subsystem {
 			right = lr;
 		}
 
-		if (isHoldAngle) {
+		/*if (isHoldAngle) {
 			left -= (targetAngle - gyro.getAngle()) / gyroHoldSensitivity;
 			right += (targetAngle - gyro.getAngle()) / gyroHoldSensitivity;
-		}
+		}*/
 
 		fl.set(left * flInv);
 		ml.set(left * mlInv);

@@ -1,6 +1,9 @@
 package org.metrobots;
 
 import org.metrobots.commands.auto.CollectandLaunch;
+import org.metrobots.commands.auto.CrossDefenseSetUpLowBar;
+import org.metrobots.commands.auto.DriveBackward;
+import org.metrobots.commands.auto.LowerShooterGoBack;
 import org.metrobots.commands.teleop.DriveGroup;
 import org.metrobots.subsystems.Climber;
 import org.metrobots.subsystems.DriveTrain;
@@ -11,6 +14,8 @@ import org.metrobots.botcv.communication.CommInterface;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,7 +41,7 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain chassis; // Instantiate the drive train, an object from the DriveTrain.java, a custom file
 					  // created by us
 
-	public static Talon fl, bl, ml, fr, br, mr, intakeLeftMotor,
+	public static SpeedController fl, bl, ml, fr, br, mr, intakeLeftMotor,
 						intakeRightMotor, actuationMotor, windowMotor; // Instantiate talons(motor controllers)
 
 	public static Encoder leftEncoder, rightEncoder; // Instantiate encoders
@@ -55,6 +61,8 @@ public class Robot extends IterativeRobot {
 	
 	public static Climber climber;
 	public static CommInterface comms;
+	
+	public static CameraServer camera;
 
 	public void robotInit() {
 		
@@ -64,25 +72,25 @@ public class Robot extends IterativeRobot {
 		 * up. This is where you tell which ports are which components
 		 */
 
-		fl = new Talon(0); // Front left - Port 
-		ml = new Talon(1);
-		bl = new Talon(2); // Back left - Port 
-		fr = new Talon(3); // Front right - Port 
-		mr = new Talon(4);
-		br = new Talon(5); // Back right - Port 
+		fl = new CANTalon(3);
+		ml = new CANTalon(4);
+		bl = new CANTalon(5);
+		fr = new CANTalon(0);
+		mr = new CANTalon(1);
+		br = new CANTalon(2);
 
-		intakeLeftMotor = new Talon(6);
-		intakeRightMotor = new Talon(7);
-		actuationMotor = new Talon(8);
-		windowMotor = new Talon(9);
+		intakeLeftMotor = new Talon(8);
+		intakeRightMotor = new Talon(6);
+		actuationMotor = new Talon(9);
+		windowMotor = new Talon(7);
 		
-		anglePot = new AnalogInput(1);
+		anglePot = new AnalogInput(0);
 		actuationLimit = new DigitalInput(2);
 
 		leftEncoder = new Encoder(6, 7); // Left gearbox assembly encoder - Ports 6, 7
 		rightEncoder = new Encoder(8, 9); // Right gearbox assembly encoder - Port 7, 8
 
-		gyro = new AnalogGyro(0); // Robot turning gyro - Port 0
+		gyro = new AnalogGyro(1); // Robot turning gyro - Port 0
 
 		//driveShift = new DoubleSolenoid(0, 1); // Shifting solenoid - Port 0, 1
 		shootArm = new DoubleSolenoid(0, 1);
@@ -108,14 +116,18 @@ public class Robot extends IterativeRobot {
 		startTime = 0.0;
 		actuateTime = 0.0;
 
-		CallHandler callHandler = new CallHandler();
+		/*CallHandler callHandler = new CallHandler();
 		try {
 			Client client = new Client("127.0.0.1", 5800, callHandler);
 			comms = (CommInterface) client.getGlobal(CommInterface.class);
 		} catch (IOException e) {
 			System.err.println("Could not establish communications with tablet!");
 			e.printStackTrace();
-		}
+		}*/
+		
+		camera = CameraServer.getInstance();
+		camera.setQuality(50);
+		camera.startAutomaticCapture("cam0");
 	}
 
 	/**
@@ -124,16 +136,16 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		timer.reset(); // Resets timer
 		timer.start(); // Starts timer
-		gyro.reset(); // Reset gyro angle
-		//chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting tank
-
+		//gyro.reset(); // Reset gyro angle
+		chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to shifting tank
+		chassis.setGyroHoldSensitivity(2); // Change sensitivity of gyro
 		chassis.setHoldAngle(false); // Make the robot not keep its angle still
 		chassis.setTargetAngle(0); // Make the robot not hold its angle
 		chassis.setFieldOriented(false); // Make robot not field oriented
-		chassis.setGyroHoldSensitivity(2); // Change sensitivity of gyro
+		Scheduler.getInstance().add(new CrossDefenseSetUpLowBar());
 
 		//Auton.setAutonCount(0); // Set auton to begin
-		Scheduler.getInstance().add(new CollectandLaunch());
+		//Scheduler.getInstance().add(new DriveBackward());
 	}
 
 	/**
@@ -155,7 +167,7 @@ public class Robot extends IterativeRobot {
 		//chassis.setDriveType(DriveTrain.SIX_MOTOR_TANK_DRIVE); // Set drive type to Shifting tank drive
 		chassis.setTargetAngle(chassis.getGyro()); // Set target angle of hold angle to current gyro angle
 		intakeLauncher.intake(0);
-		intakeLauncher.actuateAngle(0);
+		intakeLauncher.actuateSpeed(0);
 		Scheduler.getInstance().add(new DriveGroup());
 	
 	}
@@ -164,51 +176,7 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		
 		Scheduler.getInstance().run();
-	
-		/*double dly = -driver.getAxis(MetroXboxController.LEFT_Y); // Set left motors to left joystick  NEGATATED FOR SIX MOTOR INPUT
-		double dry = driver.getAxis(MetroXboxController.RIGHT_Y); // Set right motors to right joystick
-		
-		double sly = secondary.getAxis(MetroXboxController.LEFT_Y);
-		
-		boolean a_button = secondary.getButton(MetroXboxController.BUTTON_A);
-		boolean y_button = secondary.getButton(MetroXboxController.BUTTON_Y);
-		boolean rb_button = secondary.getButton(MetroXboxController.RB);
-		
-		if(rb_button){
-			if(startTime == 0){
-				startTime = Utility.getFPGATime();
-			}
-				
-			actuateTime = Utility.getFPGATime() - startTime;
-		}
-		else{
-			startTime = 0;
-			actuateTime = 0;
-		}
-		
-		if(a_button){		
-			intakeLauncher.intake(0.6);
-		}
-		else if(y_button){
-			intakeLauncher.intake(-1.0);
-		}
-		else{
-			intakeLauncher.intake(0);
-		}
-	
-		if (driver.getButton(MetroXboxController.BUTTON_B))
-			chassis.resetGyro(); // Reset gyro value once B button is pressed
-		
-		//shooter.shootSpeed(ly / 2);
-
-		//chassis.sixMotorTankDrive(dly, dry); // Drive the robot
-		
-		//intakeLauncher.actuateAngle(sly);
-		
-		//intakeLauncher.actuatePiston(actuateTime);*/
-		
 		printValues(); // Print debug values
 	}
 
@@ -222,8 +190,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void printValues() {
-		System.out.println("Potentiometer: " + Double.toString(Robot.anglePot.getValue()));
-		System.out.println("Actuation limit: " + Boolean.toString(Robot.actuationLimit.get()));
+		System.out.println("Potentiometer: " + Double.toString(Robot.anglePot.getValue()));		
 	}
 
 }
