@@ -35,15 +35,15 @@ public class ExtendorRetractShooter extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		/*if(direction) {
-			if (Robot.ac.get())
+		if(direction) {
+			if (Robot.actuationBottomLimit.get())
 				return true;
 		}
 		else {
 			if (Robot.actuationTopLimit.get())
 				return true;
 		}
-		//TODO Auto-generated method stub*/
+		//TODO Auto-generated method stub
 		return false; 
 	}
 
@@ -58,5 +58,4 @@ public class ExtendorRetractShooter extends Command {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

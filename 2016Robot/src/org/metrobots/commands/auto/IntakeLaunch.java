@@ -31,7 +31,7 @@ public class IntakeLaunch extends Command {
 	@Override
 	protected void execute() {
 		passedTime = Utility.getFPGATime() - startTime;
-		Robot.intakeLauncher.intake (speed);
+		Robot.intakeLauncher.intake(speed);
 		// TODO Auto-generated method stub
 		
 	}

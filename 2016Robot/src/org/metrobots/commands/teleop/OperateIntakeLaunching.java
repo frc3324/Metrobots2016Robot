@@ -31,7 +31,7 @@ public class OperateIntakeLaunching extends Command {
 		//boolean rb_button = Robot.secondary.getButton(MetroXboxController.RB); //works automatically; needs fixed
 		
 		if(a_button){
-			Robot.intakeLauncher.intake(-0.6); //was 0.6 //inward //negative is inward
+			Robot.intakeLauncher.intake(-0.7); //was 0.6 //inward //negative is inward
 		}
 		else if(y_button){
 			Robot.intakeLauncher.intake(1.0); //was  -1.0 //outward //positive is outward
@@ -73,13 +73,24 @@ public class OperateIntakeLaunching extends Command {
 		else if (actuationState == 1)
 			target = 640;
 		
-		Robot.intakeLauncher.actuateAngle(target);
+		// Robot.intakeLauncher.actuateAngle(target);
+		if (Robot.secondary.getButton(MetroXboxController.RB)) {
+			Robot.intakeLauncher.actuateSpeed(-Robot.secondary.getAxis(MetroXboxController.LEFT_Y) / 2);
+		} else {
+			Robot.intakeLauncher.actuateSpeed(-Robot.secondary.getAxis(MetroXboxController.LEFT_Y));	
+		}
 		
 		/*double windowSpeed = -(Robot.secondary.getAxis(MetroXboxController.RIGHT_X));
 		Robot.windowMotor.set(windowSpeed);
 		System.out.print("X1 button");*/
-		
-		
+
+		if (Robot.secondary.getButton(MetroXboxController.BUTTON_X)) { //Kill me later
+			Robot.windowMotor.set(.5);
+			while (!Robot.windowLimit.get())
+				continue;
+			
+			Robot.windowMotor.set(0);
+		}
 	}
 
 	public void useWindowMotor() {

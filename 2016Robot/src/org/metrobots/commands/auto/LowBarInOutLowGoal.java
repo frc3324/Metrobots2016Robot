@@ -11,7 +11,7 @@ public class LowBarInOutLowGoal extends CommandGroup {
 		this.addSequential(new DriveStraight(2, 0.5)); //continue through the low goal to prepare for low goal
 		this.addSequential(new Turn(65, 0.6)); //(degree, speed)
 		this.addSequential(new DriveStraight(2, 0.25)); //don't need to, but can (depends on shooter's range)
-		this.addSequential(new Launch(1.0, 1.5)); //(motor speed, time)
+		this.addSequential(new IntakeLaunch(1.0, 1.5)); //(motor speed, driveTime) //changed Launch to IntakeLaunch
 	}
 
 }

@@ -22,7 +22,7 @@ public class PositionShooter extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.intakeLauncher.actuateSpeed(pos ? -.75 : .75); //(pos ? true : false)
+		Robot.intakeLauncher.actuateSpeed(pos ? -.6 : .6); //(pos ? true : false)
 	}
 
 	@Override

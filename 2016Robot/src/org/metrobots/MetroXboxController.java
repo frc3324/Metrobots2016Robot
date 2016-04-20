@@ -68,20 +68,31 @@ public class MetroXboxController {
 	}
 
 	public double getAxis(int axis) {
-		double value = joystick.getRawAxis(axis);
-		double output = 0;
-		if (Math.abs(value) > AXIS_DEADBAND) {
-			if (axis == LEFT_Y || axis == RIGHT_Y || axis == 3) {
-				output = -value;
-			} else {
-				output = value;
+		try {
+			double value = joystick.getRawAxis(axis);
+			double output = 0;
+			if (Math.abs(value) > AXIS_DEADBAND) {
+				if (axis == LEFT_Y || axis == RIGHT_Y || axis == 3) {
+					output = -value;
+				} else {
+					output = value;
+				}
 			}
+			return output;
 		}
-		return output;
+		catch (Exception e) {
+			return 0;
+		}
 	}
 
 	public int getDPadAngle() {
-		int angle = joystick.getPOV();
+		int angle = 0;
+		try {
+			angle = joystick.getPOV();
+		}
+		catch (Exception e) {
+			angle = -1;
+		}
 		if (angle == -1) {
 			return -1;
 		} else if (angle == 90) {
@@ -120,13 +131,25 @@ public class MetroXboxController {
 	}
 
 	public boolean getButton(int button) {
-		boolean buttonVal = joystick.getRawButton(button);
+		boolean buttonVal;
+		try {
+			buttonVal = joystick.getRawButton(button);
+		}
+		catch (Exception e) {
+			buttonVal = false;
+		}
 		previousButton[button] = buttonVal;
 		return buttonVal;
 	}
 
 	public boolean toggleWhenPressed(int button) {
-		boolean buttonVal = joystick.getRawButton(button);
+		boolean buttonVal;
+		try {
+			buttonVal = joystick.getRawButton(button);
+		}
+		catch (Exception e) {
+			buttonVal = false; 
+		}
 		try {
 			if (!previousButton[button] && buttonVal)
 				toggleButton[button] = !toggleButton[button];

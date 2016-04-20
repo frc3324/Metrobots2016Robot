@@ -2,6 +2,7 @@ package org.metrobots.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -227,7 +228,7 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public void resetGyro() {
-		gyro.reset();
+		//gyro.reset();
 	}
 
 	public void setGyroHoldSensitivity(double value) {
@@ -265,6 +266,7 @@ public class DriveTrain extends Subsystem {
 		}
 	}
 
+	
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
